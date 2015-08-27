@@ -3,7 +3,7 @@ using SwinGameSDK;
 
 #if DEBUG
 using NUnit.Framework;
-#endif 
+#endif
 
 
 namespace CardGames.GameLogic
@@ -37,7 +37,7 @@ namespace CardGames.GameLogic
 		public Snap ()
 		{
 			_deck = new Deck ();
-			_gameTimer = SwinGame.CreateTimer();
+			_gameTimer = SwinGame.CreateTimer ();
 		}
 
 		/// <summary>
@@ -85,25 +85,25 @@ namespace CardGames.GameLogic
 		/// <summary>
 		/// Start the Snap game playing!
 		/// </summary>
-		public void Start()
+		public void Start ()
 		{
-			if ( ! IsStarted )			// only start if not already started!
+			if (!IsStarted)			// only start if not already started!
 			{
 				_started = true;
 				_deck.Shuffle ();		// Return the cards and shuffle
 
 				FlipNextCard ();		// Flip the first card...
-				_gameTimer.Start();
+				_gameTimer.Start ();
 			}
 		}
-			
-		public void FlipNextCard()
+
+		public void FlipNextCard ()
 		{
 			if (_deck.CardsRemaining > 0)			// have cards...
 			{
 				_topCards [0] = _topCards [1];		// move top to card 2
 				_topCards [1] = _deck.Draw ();		// get a new top card
-				_topCards[1].TurnOver();			// reveal card
+				_topCards [1].TurnOver ();			// reveal card
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace CardGames.GameLogic
 		/// Update the game. This should be called in the Game loop to enable
 		/// the game to update its internal state.
 		/// </summary>
-		public void Update()
+		public void Update ()
 		{
 			if (_gameTimer.Ticks > _flipTime)
 			{
@@ -125,10 +125,10 @@ namespace CardGames.GameLogic
 		/// Gets the player's score.
 		/// </summary>
 		/// <value>The score.</value>
-		public int Score(int idx)
+		public int Score (int idx)
 		{
-			if ( idx >= 0 && idx < _score.Length )
-				return _score[idx]; 
+			if (idx >= 0 && idx < _score.Length)
+				return _score [idx];
 			else
 				return 0;
 		}
@@ -140,39 +140,40 @@ namespace CardGames.GameLogic
 		public void PlayerHit (int player)
 		{
 			//TODO: consider deducting score for miss hits???
-			if ( player >= 0 && player < _score.Length &&  	// its a valid player
-				 IsStarted && 								// and the game is started
-				 _topCards [0] != null && _topCards [0].Rank == _topCards [1].Rank) // and its a match
+			if (player >= 0 && player < _score.Length && // its a valid player
+			    IsStarted && // and the game is started
+			    _topCards [0] != null && _topCards [0].Rank == _topCards [1].Rank) // and its a match
 			{
-				_score[player]++;
-				//TODO: consider playing a sound here...
+				_score [player]++;
+				SwinGame.PlaySoundEffect ("Slap");
 			}
 
 			// stop the game...
 			_started = false;
 			_gameTimer.Stop ();
 		}
-	
+
 		#region Snap Game Unit Tests
+
 		#if DEBUG
 
 		public class SnapTests
 		{
 			[Test]
-			public void TestSnapCreation()
+			public void TestSnapCreation ()
 			{
-				Snap s = new Snap();
+				Snap s = new Snap ();
 
-				Assert.IsTrue(s.CardsRemain);
+				Assert.IsTrue (s.CardsRemain);
 				Assert.IsNull (s.TopCard);
 			}
 
 			[Test]
-			public void TestFlipNextCard()
+			public void TestFlipNextCard ()
 			{
-				Snap s = new Snap();
+				Snap s = new Snap ();
 
-				Assert.IsTrue(s.CardsRemain);
+				Assert.IsTrue (s.CardsRemain);
 				Assert.IsNull (s.TopCard);
 
 				s.FlipNextCard ();
@@ -182,7 +183,7 @@ namespace CardGames.GameLogic
 			}
 		}
 
-		#endif 
+		#endif
 		#endregion
 	}
 }
